@@ -46,6 +46,16 @@
     }
     #result {
       margin-top: 30px;
+      .fade-in {
+        opacity: 0;
+        animation: fadeIn 1.5s ease-out forwards;
+      }
+
+      @keyframes fadeIn {
+        to {
+          opacity: 1;
+        }
+      }
     }
   </style>
 </head>
@@ -248,7 +258,7 @@
       const data = composerData[topComposer];
 
             resultDiv.innerHTML = `
-              <div style="background: linear-gradient(to right, #fdf6e3, #e0dcc3); padding: 20px; border-radius: 10px; box-shadow: 0 0 15px rgba(0,0,0,0.2);">
+  　          <div class="fade-in" style="background: linear-gradient(to right, #fdf6e3, #e0dcc3); padding: 20px; border-radius: 10px; box-shadow: 0 0 15px rgba(0,0,0,0.2);">
                 <h2 style="color: #2c3e50; border-bottom: 2px solid #999; padding-bottom: 5px;">おすすめ作曲家：${topComposer}</h2>
                 <img src="${data.image}" alt="${topComposer}">
                 <p><strong>人物像：</strong>${data.description}</p>
@@ -292,6 +302,7 @@
         </script>
       </body>
       </html>
+
 
 
 
