@@ -2,8 +2,9 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>クラシック作曲家診断</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>クラシック作曲家診断</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     body {
       font-family: "Yu Mincho", serif;
@@ -122,23 +123,47 @@
     const composerData = {
       "ベートーヴェン": {
         image: "https://upload.wikimedia.org/wikipedia/commons/6/6f/Beethoven.jpg",
-        description: "情熱と理性を兼ね備えた革新者。音楽に哲学を宿し、運命に挑んだ巨匠。",
-        works: ["交響曲第5番『運命』", "交響曲第6番『田園』", "交響曲第7番", "ピアノソナタ第14番『月光』", "ピアノ協奏曲第5番『皇帝』"]
+        description: "ベートーヴェンは聴力を失いながらも、数々の名曲を生み出した不屈の作曲家である。彼は古典派からロマン派への橋渡しを担い、音楽に個人の感情と自由な表現を導入した。孤独で激しい気性を持ちつつも、人間の尊厳と理想を追求し続けた芸術家である。",
+        works: [
+          { title: "交響曲第5番『運命』", url: "https://youtu.be/a9UApyClFKA?si=aLhOwiE5SFc9KUgL" },
+          { title: "交響曲第6番『田園』", url: "https://youtu.be/Zv4PIFRpYcw?si=_OabqrdEQoPdklUv" }, 
+          { title: "交響曲第7番", url: "https://youtu.be/-4788Tmz9Zo?si=ck41wO7-yyHjpfGq" },
+          { title: "ピアノソナタ第14番『月光』", url: "https://youtu.be/VHwoypAY52k?si=zT8hkAi__RnhaN3h" },
+          { title: "ピアノ協奏曲第5番『皇帝』", url: "https://youtu.be/pEYajsa8NeM?si=5t0H1_1p7DTZt4AU" }
+        ]
       },
       "チャイコフスキー": {
         image: "https://encrypted-tbn2.gstatic.com/licensed-image?q=tbn:ANd9GcT6-YfhF07M1k_LX0tdUytREE606KlUxozwbfi7QsAp92I41u2lGBxaQvDvndDAApH4zUj7mbqzSPh69jw",
-        description: "感情の奔流を音楽に変えたロマン派の巨匠。",
-        works: ["交響曲第5番", "交響曲第6番『悲愴』", "白鳥の湖", "くるみ割り人形", "スラヴ行進曲"]
+        description: "感情豊かな旋律と華麗な管弦楽法で知られるロシアのロマン派作曲家である。 彼は繊細で内向的な性格を持ち、葛藤や孤独を音楽に昇華させた芸術家であった。 バレエ音楽や交響曲など多彩なジャンルで傑作を残し、世界中で高く評価されている。",
+        works: [
+          { title: "交響曲第5番", url: "https://youtu.be/1dsbkhTkD7s?si=Vt9FGn8-GFWTdn_Y" },
+          { title: "交響曲第6番『悲愴』", url: "https://youtu.be/SVnF3x44rvU?si=0X_ZKNkRrNszBsKc" },
+          { title: "『白鳥の湖』", url: "https://youtu.be/TrQ6pRhyinU?si=8VW6ppU7B34Uzkg7" },
+          { title: "『くるみ割り人形』組曲", url: "https://youtu.be/aB1eMfylQhE?si=1czeCZ71nqj1wSce" },
+          { title: "スラヴ行進曲", url: "https://www.youtube.com/watch?v=rgOCUUQ75HE" }
+        ]
       },
       "ブラームス": {
         image: "https://ptna-assets.s3-ap-northeast-1.amazonaws.com/enc/person/282.jpg",
-        description: "伝統を重んじながらも深い内面を描いた誠実な作曲家。",
-        works: ["交響曲第1番", "交響曲第4番", "ハンガリー舞曲", "大学祝典序曲", "悲劇的序曲"]
+        description: "ロマン派に属しながらも古典的な形式美を重んじた、厳格で内省的な作曲家である。彼はベートーヴェンの後継者と称されるほど伝統への敬意が深く、交響曲の完成には20年もの歳月を費やす慎重さを持っていた。質素な生活を好み、名声よりも芸術の本質を追求した誠実な人物である。",
+        works: [
+          { title: "交響曲第1番", url: "https://youtu.be/51xDbdUFc8o?si=BXAE9yJeowwjczIy" },
+          { title: "交響曲第4番", url: "https://youtu.be/o69YVL_XKJo?si=5zAV9-dTbRgVVTuG" },
+          { title: "ハンガリー舞曲第5番", url: "https://youtu.be/QAMxkietiik?si=nh_1N-2gwHYkXBPU" },
+          { title: "大学祝典序曲", url: "https://youtu.be/AgJhsa-wLNU?si=gD8P0MVVoFiYAVtf" },
+          { title: "悲劇的序曲", url: "https://youtu.be/PUPVO3cFAWQ?si=JzTx9SkIrGZitRk_" }
+        ]
       },
       "シベリウス": {
         image: "https://www.kiyama-music.com/wp-content/uploads/2022/03/Jean_Sibelius_1913-768x1024.jpeg",
-        description: "フィンランドの自然と魂を音楽に込めた静謐な詩人。",
-        works: ["交響曲第2番", "交響曲第5番", "フィンランディア", "カレリア組曲", "悲しきワルツ"]
+        description: "シベリウスはフィンランドの自然や神話に深く影響を受けた作曲家であり、民族的アイデンティティを音楽で表現した。内向的で孤高な性格を持ち、晩年は創作から距離を置きながらも国民的英雄として尊敬された。彼の音楽は厳格で構築的な美しさを持ち、フィンランドの精神を象徴する存在となった。",
+        works: [
+          { title: "交響曲第2番", url: "https://youtu.be/iXU8EXL7a_4?si=Tzlk-BiIn58aPM9M" },
+          { title: "交響曲第5番", url: "https://youtu.be/EcjvvBbZhn4?si=dEpHfbGgLg9fezsJ" },
+          { title: "フィンランディア", url: "https://youtu.be/fE0RbPsC9uE?si=f8QpEe3s770AKzf4" },
+          { title: "ヴァイオリン協奏曲 ニ短調", url: "https://youtu.be/J0w0t4Qn6LY?si=heeq63GCnDhjhOPm" },
+          { title: "悲しきワルツ", url: "https://youtu.be/aihaQHzGZGQ?si=5BNDdDn-vNRrgOBl" }
+        ]
       }
     };
 
@@ -182,16 +207,41 @@
                 <p><strong>人物像：</strong>${data.description}</p>
                 <p><strong>代表作品：</strong></p>
                 <ul style="list-style-type: square; padding-left: 20px;">
-                  ${data.works.map(work => `<li>${work}</li>`).join("")}
+                  ${data.works.map(work => `<li><a href="${work.url}" target="_blank">${work.title}</a></li>`).join("")}
                 </ul>
                 <p style="margin-top: 20px;">あなたの音楽的感性は、<strong>${topComposer}</strong>の芸術と深く響き合っています。<br>  
                 その旋律は、あなたの心に新たな世界を開いてくれることでしょう。</p>
+                <canvas id="scoreRadar" width="300" height="300" style="margin-top: 30px;"></canvas
               </div>
-            `;
+            `; 
+            const canvas = document.getElementById("scoreRadar");
+            new Chart(canvas, {
+              type: "radar",
+              data: {
+                labels: Object.keys(scores),
+                datasets: [{
+                  label: "一致度",
+                  data: Object.values(scores),
+                  backgroundColor: "rgba(192, 178, 131, 0.3)",
+                  borderColor: "rgba(44, 62, 80, 1)",
+                  borderWidth: 2,
+                  pointBackgroundColor: "#2c3e50"
+                }]
+              },
+              options: {
+                scales: {
+                  r: {
+                    beginAtZero: true,
+                    max: 5,
+                    ticks: {
+                      stepSize: 1
+                    }
+                  }
+                }
+              }
+            });
             document.getElementById("quiz").innerHTML = "";
           }
         </script>
       </body>
       </html>
-
-
