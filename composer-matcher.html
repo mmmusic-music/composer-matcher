@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>クラシック作曲家診断</title>
+  <style>
+    body {
+      font-family: "Yu Mincho", serif;
+      background: linear-gradient(to bottom, #fdf6e3, #e0dcc3);
+      padding: 30px;
+      color: #2c3e50;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    h1 {
+      font-size: 32px;
+      border-bottom: 2px solid #999;
+      padding-bottom: 10px;
+    }
+    .question {
+      margin-bottom: 20px;
+    }
+    button {
+      margin: 5px;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      background-color: #dcd0c0;
+      cursor: pointer;
+      border-radius: 5px;
+      display: block; 
+      width: 100%; 
+    }
+    button:hover {
+      background-color: #c0b283;
+    }
+    img {
+      max-width: 300px;
+      border: 3px solid #555;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+      margin-top: 20px;
+    }
+    #result {
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+  <div id="start-screen">
+    <h1>クラシック作曲家診断</h1>
+    <p>この診断では、</p>
+    <ul>
+      <li><b>ベートーヴェン</b></li>
+      <li><b>ブラームス</b></li>
+      <li><b>チャイコフスキー</b></li>
+      <li><b>シベリウス</b></li>
+    </ul>
+    <p>の中から、あなたの音楽的感性に最も近い作曲家を判定します。</p>
+    <p>はじめますか？</p>
+    <button onclick="startQuiz()">スタート</button>
+  </div>
+
+  <div id="quiz-screen" style="display:none;">
+    <div id="quiz"></div>
+    <div id="result"></div>
+  </div>
+
+  <script>
+    const composers = ["ベートーヴェン", "チャイコフスキー", "ブラームス", "シベリウス"];
+    const scores = {};
+    composers.forEach(name => scores[name] = 0);
+
+    const questions = [
+      {
+        text: "音楽に求めるものは？",
+        options: {
+          "魂を揺さぶる情熱": "チャイコフスキー",
+          "知性と構造美": "ベートーヴェン",
+          "深い感情と伝統の融合": "ブラームス",
+          "自然との調和と静けさ": "シベリウス"
+        }
+      },
+      {
+        text: "あなたの性格に近いものは？",
+        options: {
+          "沈着冷静で自然を愛する": "シベリウス",
+          "内向的で誠実": "ブラームス",
+          "強い意志と探究心": "ベートーヴェン",
+          "激しく感情的": "チャイコフスキー"
+        }
+      },
+      {
+        text: "創作において最も重視するものは？",
+        options: {
+          "伝統と内省的な美しさ": "ブラームス",
+          "哲学的な深さと構造": "ベートーヴェン",
+          "感情の爆発とドラマ性": "チャイコフスキー",
+          "自然からの着想と静謐さ": "シベリウス"
+        }
+      },
+      {
+        text: "理想の作業環境は？",
+        options: {
+          "情熱的な演奏が響くホール": "チャイコフスキー",
+          "孤独な部屋で思索にふける": "ベートーヴェン",
+          "静かな森の中": "シベリウス",
+          "都会の喧騒から離れた書斎": "ブラームス"
+        }
+      },
+      {
+        text: "芸術とは何か？",
+        options: {
+          "心の機微を映す鏡": "チャイコフスキー",
+          "人間の深淵を探る旅": "ブラームス",
+          "魂の叫びを形にする手段": "ベートーヴェン",
+          "自然の美を音にすること": "シベリウス"
+        }
+      }
+    ];
+
+    const composerData = {
+      "ベートーヴェン": {
+        image: "https://upload.wikimedia.org/wikipedia/commons/6/6f/Beethoven.jpg",
+        description: "情熱と理性を兼ね備えた革新者。音楽に哲学を宿し、運命に挑んだ巨匠。",
+        works: ["交響曲第5番『運命』", "交響曲第6番『田園』", "交響曲第7番", "ピアノソナタ第14番『月光』", "ピアノ協奏曲第5番『皇帝』"]
+      },
+      "チャイコフスキー": {
+        image: "https://encrypted-tbn2.gstatic.com/licensed-image?q=tbn:ANd9GcT6-YfhF07M1k_LX0tdUytREE606KlUxozwbfi7QsAp92I41u2lGBxaQvDvndDAApH4zUj7mbqzSPh69jw",
+        description: "感情の奔流を音楽に変えたロマン派の巨匠。",
+        works: ["交響曲第5番", "交響曲第6番『悲愴』", "白鳥の湖", "くるみ割り人形", "スラヴ行進曲"]
+      },
+      "ブラームス": {
+        image: "https://ptna-assets.s3-ap-northeast-1.amazonaws.com/enc/person/282.jpg",
+        description: "伝統を重んじながらも深い内面を描いた誠実な作曲家。",
+        works: ["交響曲第1番", "交響曲第4番", "ハンガリー舞曲", "大学祝典序曲", "悲劇的序曲"]
+      },
+      "シベリウス": {
+        image: "https://www.kiyama-music.com/wp-content/uploads/2022/03/Jean_Sibelius_1913-768x1024.jpeg",
+        description: "フィンランドの自然と魂を音楽に込めた静謐な詩人。",
+        works: ["交響曲第2番", "交響曲第5番", "フィンランディア", "カレリア組曲", "悲しきワルツ"]
+      }
+    };
+
+    let current = 0;
+
+    function startQuiz() {
+      document.getElementById("start-screen").style.display = "none";
+      document.getElementById("quiz-screen").style.display = "block";
+      showQuestion();
+    }
+
+    function showQuestion() {
+      const q = questions[current];
+      const quizDiv = document.getElementById("quiz");
+      quizDiv.innerHTML = `<div class="question"><strong>${q.text}</strong></div>`;
+      for (const [text, composer] of Object.entries(q.options)) {
+        const btn = document.createElement("button");
+        btn.textContent = text;
+        btn.onclick = () => {
+          scores[composer]++;
+          current++;
+          if (current < questions.length) {
+            showQuestion();
+          } else {
+            showResult();
+          }
+        };
+        quizDiv.appendChild(btn);
+      }
+    }
+
+    function showResult() {
+      const resultDiv = document.getElementById("result");
+      const topComposer = Object.entries(scores).sort((a, b) => b[1] - a[1])[0][0];
+      const data = composerData[topComposer];
+
+            resultDiv.innerHTML = `
+              <div style="background: linear-gradient(to right, #fdf6e3, #e0dcc3); padding: 20px; border-radius: 10px; box-shadow: 0 0 15px rgba(0,0,0,0.2);">
+                <h2 style="color: #2c3e50; border-bottom: 2px solid #999; padding-bottom: 5px;">おすすめ作曲家：${topComposer}</h2>
+                <img src="${data.image}" alt="${topComposer}">
+                <p><strong>人物像：</strong>${data.description}</p>
+                <p><strong>代表作品：</strong></p>
+                <ul style="list-style-type: square; padding-left: 20px;">
+                  ${data.works.map(work => `<li>${work}</li>`).join("")}
+                </ul>
+                <p style="margin-top: 20px;">あなたの音楽的感性は、<strong>${topComposer}</strong>の芸術と深く響き合っています。<br>  
+                その旋律は、あなたの心に新たな世界を開いてくれることでしょう。</p>
+              </div>
+            `;
+            document.getElementById("quiz").innerHTML = "";
+          }
+        </script>
+      </body>
+      </html>
