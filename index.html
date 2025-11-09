@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>クラシック作曲家診断</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <style>
     body {
       font-family: "Yu Mincho", serif;
@@ -46,17 +48,6 @@
     }
     #result {
       margin-top: 30px;
-    }
-    
-    .fade-in {
-      opacity: 0;
-      animation: fadeIn 1.5s ease-out forwards;
-    }
-
-    @keyframes fadeIn {
-      to {
-        opacity: 1;
-      }
     }
   </style>
 </head>
@@ -259,7 +250,7 @@
       const data = composerData[topComposer];
 
             resultDiv.innerHTML = `
-  　          <div class="fade-in" style="background: linear-gradient(to right, #fdf6e3, #e0dcc3); padding: 20px; border-radius: 10px; box-shadow: 0 0 15px rgba(0,0,0,0.2);">
+  　          <div style="background: linear-gradient(to right, #fdf6e3, #e0dcc3); padding: 20px; border-radius: 10px; box-shadow: 0 0 15px rgba(0,0,0,0.2);">
                 <h2 style="color: #2c3e50; border-bottom: 2px solid #999; padding-bottom: 5px;">おすすめ作曲家：${topComposer}</h2>
                 <img src="${data.image}" alt="${topComposer}">
                 <p><strong>人物像：</strong>${data.description}</p>
@@ -270,6 +261,7 @@
                 <p style="margin-top: 20px;">あなたの音楽的感性は、<strong>${topComposer}</strong>の芸術と深く響き合っています。<br>  
                 その旋律は、あなたの心に新たな世界を開いてくれることでしょう。</p>
                 <canvas id="scoreRadar" width="300" height="300" style="margin-top: 30px;"></canvas>
+                <button onclick="saveResult()" style="margin-top: 20px; padding: 10px 20px; font-size: 16px; background-color: #f7c873; border: none; border-radius: 5px; cursor: pointer;">結果を画像保存<br>※肖像画は含まれません</button>
               </div>
             `; 
             const canvas = document.getElementById("scoreRadar");
@@ -300,6 +292,18 @@
             });
             document.getElementById("quiz").innerHTML = "";
           }
+
+        function saveResult() {
+          const resultDiv = document.getElementById("result");
+          html2canvas(resultDiv, {
+            ignoreElements: (element) => element.tagName === "IMG"
+          }).then(canvas => {
+            const link = document.createElement("a");
+            link.download = "composer_result.png";
+            link.href = canvas.toDataURL("image/png");
+            link.click();
+          });
+        }
         </script>
       </body>
       </html>
